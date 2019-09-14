@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sstream>
 #include <vector>
+
 std::string INPUT_FILEPATH = "./sample input/banksy-cnn.txt";
 
 /*
@@ -91,14 +92,44 @@ std::vector<std::string> 	sortCyclicShiftedArray(std::vector<std::string> shifte
 
 void 	encode(std::vector<std::string> sortedCyclicShiftedArray, int originalIndex)
 {
-	std::cout << originalIndex << std::endl;
 
+	std::cout << originalIndex << "\n";
 	int string_length = sortedCyclicShiftedArray[0].length();
+
+	std::vector<char> terminal_characters;
 
 	for (int i = 0; i < sortedCyclicShiftedArray.size(); ++i)
 	 {
 	 	//TODO
-	 } 
+	 	terminal_characters.push_back(sortedCyclicShiftedArray[i][string_length - 1]);
+	 }
+	  
+	 bool streak = false;
+	 int count = 1;
+	 for (int i = 0; i < terminal_characters.size() - 1; ++i)
+	 {
+	 	
+	 	char current, next;
+	 	current = terminal_characters[i];
+	 	next = terminal_characters[i + 1];
+	 	
+	 	if (current == next)
+	 	{
+	 		count++;
+	 		streak = true;
+	 	}
+	 	else
+	 	{
+	 		streak = false;
+	 	}
+
+	 	if (streak == false)
+	 	{
+	 		std::cout << count << current << " " ; 
+	 		count = 1;
+	 	}
+	 }
+	 std::cout << "\n";
 }
 
 int 	getOriginalStringIndex(std::vector<std::string> CyclicShiftedArray, std::vector<std::string> sortedCyclicShiftedArray)
@@ -115,27 +146,34 @@ int 	getOriginalStringIndex(std::vector<std::string> CyclicShiftedArray, std::ve
 	}
 	return -1;
 }
+
+/**/
 int 	main() {
 	std::string file_2_str = file_to_str(INPUT_FILEPATH); // file read as a string
 	 
 	std::vector<std::string>lines = str_to_lines(file_2_str, "\n");
 	std::vector<std::string> lines_CyclicShifted, lines_CyclicShifted_sorted;
-    lines_CyclicShifted = cyclicShift("Mississippi");
 
-    std::cout << "cyclic shifting..." << std::endl;
-    for (int i = 0; i < lines_CyclicShifted.size(); ++i)
-    {
-    	std::cout << lines_CyclicShifted[i] << std::endl;
-    }
-    
-    lines_CyclicShifted_sorted = sortCyclicShiftedArray(lines_CyclicShifted);
+	for (int i = 0; i < lines.size(); ++i)
+	{
+	    lines_CyclicShifted = cyclicShift(lines[i]);
 
-    std::cout << "sorted ..." << std::endl;
-    for (int i = 0; i < lines_CyclicShifted_sorted.size(); ++i)
-    {
-    	std::cout << lines_CyclicShifted_sorted[i] << std::endl;
-    }
-    std::cout << getOriginalStringIndex(lines_CyclicShifted, lines_CyclicShifted_sorted) << std::endl;
-    encode(lines_CyclicShifted_sorted, getOriginalStringIndex(lines_CyclicShifted, lines_CyclicShifted_sorted));
+	    // std::cout << "cyclic shifting..." << std::endl;
+	    // for (int i = 0; i < lines_CyclicShifted.size(); ++i)
+	    // {
+	    // 	std::cout << lines_CyclicShifted[i] << std::endl;
+	    // }
+	    
+	    lines_CyclicShifted_sorted = sortCyclicShiftedArray(lines_CyclicShifted);
+
+	    // std::cout << "sorted ..." << std::endl;
+	    // for (int i = 0; i < lines_CyclicShifted_sorted.size(); ++i)
+	    // {
+	    // 	std::cout << lines_CyclicShifted_sorted[i] << std::endl;
+	    // }
+	    encode(lines_CyclicShifted_sorted, getOriginalStringIndex(lines_CyclicShifted, lines_CyclicShifted_sorted));
+	}
+
+	while(true){}
     return 0;
 }
