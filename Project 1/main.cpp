@@ -5,7 +5,7 @@
 #include <sstream>
 #include <vector>
 
-std::string INPUT_FILEPATH = "./sample input/banksy-cnn.txt";
+std::string INPUT_FILEPATH = "./sample input/bbq-new-yorker.txt";
 
 /*
 * split the incomin string into lines.
@@ -32,10 +32,25 @@ std::vector<std::string> 	str_to_lines(std::string str, std::string delim)
 */
 std::string 	file_to_str(std::string filePath)
 {
-	std::ifstream t(filePath);
-	std::stringstream buffer;
-	buffer << t.rdbuf();
-	return buffer.str();	
+	
+	// std::ifstream t(filePath);
+	// std::stringstream buffer;
+	// buffer << t.rdbuf();
+	// return buffer.str();
+
+    FILE *file;
+    std::string str;
+
+    file = fopen(filePath.c_str(), "r");
+    if (file) {
+        int chr;
+        while ((chr = fgetc(file)) != EOF)
+            str += (char) chr;
+        fclose(file);
+    } else {
+        printf("File not found.");
+    }
+    return str;
 } 
 
 /*
@@ -106,7 +121,7 @@ void 	encode(std::vector<std::string> sortedCyclicShiftedArray, int originalInde
 	  
 	 bool streak = false;
 	 int count = 1;
-	 for (int i = 0; i < terminal_characters.size() - 1; ++i)
+	 for (int i = 0; i < terminal_characters.size(); ++i)
 	 {
 	 	
 	 	char current, next;
@@ -148,11 +163,13 @@ int 	getOriginalStringIndex(std::vector<std::string> CyclicShiftedArray, std::ve
 }
 
 /**/
-int 	main() {
+int 	main() 
+{
 	std::string file_2_str = file_to_str(INPUT_FILEPATH); // file read as a string
-	 
+	std::cout << file_2_str << "\n"; 
 	std::vector<std::string>lines = str_to_lines(file_2_str, "\n");
 	std::vector<std::string> lines_CyclicShifted, lines_CyclicShifted_sorted;
+
 
 	for (int i = 0; i < lines.size(); ++i)
 	{
@@ -173,7 +190,6 @@ int 	main() {
 	    // }
 	    encode(lines_CyclicShifted_sorted, getOriginalStringIndex(lines_CyclicShifted, lines_CyclicShifted_sorted));
 	}
-
 	while(true){}
     return 0;
 }
