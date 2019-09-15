@@ -30,14 +30,8 @@ std::vector<std::string> 	str_to_lines(std::string str, std::string delim)
 * converts the incoming file and outputs the contents 
 * as a std::string 
 */
-std::string 	file_to_str(std::string filePath)
+std::string	file_to_str(std::string filePath)
 {
-	
-	// std::ifstream t(filePath);
-	// std::stringstream buffer;
-	// buffer << t.rdbuf();
-	// return buffer.str();
-
     FILE *file;
     std::string str;
 
@@ -84,7 +78,7 @@ std::vector<std::string>	cyclicShift(std::string line)
 /*
 * sort the cyclic shifted array.
 */
-std::vector<std::string> 	sortCyclicShiftedArray(std::vector<std::string> shiftedArray)
+std::vector<std::string> 	sortCyclicShiftedArray_InsertionSort(std::vector<std::string> shiftedArray)
 {
 	std::string key;
 	int j;
@@ -163,10 +157,11 @@ int 	getOriginalStringIndex(std::vector<std::string> CyclicShiftedArray, std::ve
 }
 
 /**/
-int 	main() 
+int 	main(int argc, char *argv[]) 
 {
-	std::string file_2_str = file_to_str(INPUT_FILEPATH); // file read as a string
-	std::cout << file_2_str << "\n"; 
+
+	std::string file_2_str = file_to_str(argv[2]); // file read as a string
+	// std::cout << file_2_str << "\n"; 
 	std::vector<std::string>lines = str_to_lines(file_2_str, "\n");
 	std::vector<std::string> lines_CyclicShifted, lines_CyclicShifted_sorted;
 
@@ -181,7 +176,10 @@ int 	main()
 	    // 	std::cout << lines_CyclicShifted[i] << std::endl;
 	    // }
 	    
-	    lines_CyclicShifted_sorted = sortCyclicShiftedArray(lines_CyclicShifted);
+	    if (std::string(argv[1]) == "insertion")
+	    {
+	    	lines_CyclicShifted_sorted = sortCyclicShiftedArray_InsertionSort(lines_CyclicShifted);
+	    }
 
 	    // std::cout << "sorted ..." << std::endl;
 	    // for (int i = 0; i < lines_CyclicShifted_sorted.size(); ++i)
@@ -190,6 +188,6 @@ int 	main()
 	    // }
 	    encode(lines_CyclicShifted_sorted, getOriginalStringIndex(lines_CyclicShifted, lines_CyclicShifted_sorted));
 	}
-	while(true){}
+	// while(true){}
     return 0;
 }
